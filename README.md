@@ -1,2 +1,2 @@
-# gen-redux
+# codeforge
 redux generator

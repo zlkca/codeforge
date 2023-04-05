@@ -1,17 +1,24 @@
+import {getEntity} from "../utils.js";
 
-import pascalcase from 'pascalcase';
-import pluralize from "pluralize";
+function getRows(entities){
+    const arr = [];
+    
+    entities.forEach(it => {
+        arr.push(`
+    export const select${it.pascalPlural} = (state) => state.${it.single}? state.${it.single}.${it.plural} : [];
+    export const select${it.pascalSingle} = (state) => state.${it.single}? state.${it.single}.${it.single} : null;
+        `);
+    });
 
+    return arr.join("");
+}
 
 export default function getSelector(module){
-    const single = module;
-    const plural = pluralize(single);
-  
-    const pascalSingle = pascalcase(single, {pascalCase: true});
-    const pascalPlural = pascalcase(plural, {pascalCase: true});
-  
-    return `
-export const select${pascalPlural} = (state) => state.${single}? state.${single}.${plural} : [];
-export const select${pascalSingle} = (state) => state.${single}? state.${single}.${single} : null;
-`
+    const entities = module.entities.map(it => {
+        return getEntity(it);
+    });
+
+    const rows = getRows(entities);
+   
+    return `${rows}`;
 }

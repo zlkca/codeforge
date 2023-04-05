@@ -4,7 +4,7 @@ import pluralize from "pluralize";
 
 
 export default function getService(module){
-    const single = module;
+    const single = module.name;
     const plural = pluralize(single);
   
     const pascalSingle = pascalcase(single, {pascalCase: true});
