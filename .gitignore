@@ -1,46 +1,17 @@
 # dependencies
-admin/node_modules
-rdbApi/node_modules
-nonsqlApi/node_modules
-web/node_modules
-tools/node_modules
-
-#generated files
-tools/redux
-tools/pages
-tools/services
-tools/routes
-
-# testing
-admin/coverage
-rdbApi/coverage
-nonsqlApi/coverage
-web/coverage
+node_modules
 
 # production
-admin/build
-rdbApi/build
-nonsqlApi/build
-web/build
-
-# npmjs
-admin/dist
-rdbApi/dist
-nonsqlApi/dist
-web/dist
-
+dist
+build
 package-lock.json
 
 # misc
 .DS_Store
 
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# distribution
-dist/
 
 #env
 

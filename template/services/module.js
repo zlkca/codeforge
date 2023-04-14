@@ -12,36 +12,38 @@ export default function getService(module){
   
     return `
 import {get, post, put, del} from './http';
-import { buildApiUrlRdb, buildApiUrlNonsql } from './queryString';
+import { buildApiUrlNonsql } from './queryString';
 
-export const fetch${pascalPlural} = async (query, optional) => {
-    const url = buildApiUrlNonsql('/${plural}', query, optional);
-    return await get(url);
-}
+export const ${single}API = {
+    fetch${pascalPlural}: async (query, optional) => {
+        const url = buildApiUrlNonsql('/${plural}', query, optional);
+        return await get(url);
+    },
 
-export const fetch${pascalSingle} = async (id, optional) => {
-    const url = buildApiUrlNonsql('/${plural}', id, optional);
-    return await get(url);
-}
+    fetch${pascalSingle}: async (id, optional) => {
+        const url = buildApiUrlNonsql('/${plural}', id, optional);
+        return await get(url);
+    },
 
-export const create${pascalSingle} = async (data) => {
-    const url = buildApiUrlNonsql('/${plural}');
-    return await post(url, data);
-}
+    create${pascalSingle}: async (data) => {
+        const url = buildApiUrlNonsql('/${plural}');
+        return await post(url, data);
+    },
 
-export const update${pascalSingle} = async (id, data) => {
-    const url = buildApiUrlNonsql('/${plural}', id);
-    return await put(url, data);
-}
+    update${pascalSingle}: async (id, data) => {
+        const url = buildApiUrlNonsql('/${plural}', id);
+        return await put(url, data);
+    },
 
-export const delete${pascalSingle} = async (id) => {
-    const url = buildApiUrlNonsql('/${plural}', id);
-    return await del(url);
-}
+    delete${pascalSingle}: async (id) => {
+        const url = buildApiUrlNonsql('/${plural}', id);
+        return await del(url);
+    },
 
-export const search${pascalPlural} = async (query) => {
-    const url = buildApiUrlRdb('/search/${plural}');
-    return await post(url, query);
+    search${pascalPlural}: async (query) => {
+        const url = buildApiUrlNonsql('/search/${plural}');
+        return await post(url, query);
+    },
 }
 `
 }
