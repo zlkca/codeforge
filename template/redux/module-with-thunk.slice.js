@@ -1,30 +1,36 @@
+import pascalcase from 'pascalcase';
+import {getEntity} from '../utils.js';
 
-import {getEntity} from "../utils.js";
-
-// function getActions(entities){
-//     const actionArray = [];
-//     entities.forEach(it => {
-//     actionArray.push(`
-//     fetch${it.pascalPlural},
-//     fetch${it.pascalSingle},
-//     create${it.pascalSingle},
-//     update${it.pascalSingle},
-//     delete${it.pascalSingle},
-//     search${it.pascalPlural},
-//     `);
-//     });
-//     return actionArray.join(""); // import { ${actionArray.join("")} } from './${module.name}.action'
-// }
-
-function getThunkRows(module, entities){
-    const importServiceArray = [];
+function getInitalState(entities){
     const arr = [];
+    
+    entities.forEach(it => {
+        arr.push(`
+    ${it.plural}: [],
+    ${it.single}: null,
+    selected${it.pascalSingle}Id: null,
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed',
+    error: null
+        `);
+    });
+
+    return arr.join("");
+}
+
+function getImportServices(entities){
+    const importServiceArray = [];
+    
     entities.forEach(it => {
         importServiceArray.push(`
-import { ${it.single}API } from '../../services/${it.single}API'
+import { ${it.single}API } from '../../services/${it.single}API';
     `);
     });
 
+    return importServiceArray.join("");
+}
+
+function getThunkRows(module, entities){
+    const arr = [];
 
     entities.forEach(it => {
         arr.push(`
@@ -62,7 +68,7 @@ export const search${it.pascalPlural} = createAsyncThunk(
 
 export const update${it.pascalSingle} = createAsyncThunk(
     "${it.single}/update${it.pascalSingle}",
-    async (id, updates, thunkAPI) => {
+    async ({id, updates}, thunkAPI) => {
         const rsp = await ${it.single}API.update${it.pascalSingle}(id, updates)
         return rsp.data
     }
@@ -77,7 +83,7 @@ export const delete${it.pascalSingle} = createAsyncThunk(
     )
           `);
     });
-    return importServiceArray.join("") + arr.join("");
+    return arr.join("");
     
 }
 
@@ -161,23 +167,45 @@ function getExtraReducers(entities){
     
 }
 
-export default function getThunks(module){
+
+export default function getSliceWithThunk(module){
     const entities = module.entities.map(it => {
         return getEntity(it);
     });
-    // const actions = getActions(entities);
-    const rows = getThunkRows(module, entities);
+
+    const importServices = getImportServices(entities);
+    const initialState = getInitalState(entities);
+    const thunkRows = getThunkRows(module, entities);
     const extraReducers = getExtraReducers(entities);
-//     import { ${actions}
-// } from './${module.name}.action'
+
+    const pascalSingle = pascalcase(module.name, {pascalCase: true});
+    // const reducers = getReducers(entities);
+    // const actions = getActions(entities);
 
     return `
-import { createAsyncThunk } from '@reduxjs/toolkit'
-${rows}
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+${importServices}
+
+export const initial${pascalSingle}State = {
+    ${initialState}
+}
+
+${thunkRows}
 
 export const ${module.name}ThunkReducers = (builder) => {
     builder
     ${extraReducers}
 }
-    `;
+
+export const ${module.name}Slice = createSlice({
+    name: '${module.name}',
+    initialState: initial${pascalSingle}State,
+    reducers: {
+        
+    },
+    extraReducers: ${module.name}ThunkReducers
+})
+
+export default ${module.name}Slice.reducer;
+    `
 }
