@@ -12,36 +12,36 @@ export default function getService(module){
   
     return `
 import {get, post, put, del} from './http';
-import { buildApiUrlNonsql } from './queryString';
+import { buildApiUrl } from './utils';
 
 export const ${single}API = {
-    fetch${pascalPlural}: async (query, optional) => {
-        const url = buildApiUrlNonsql('/${plural}', query, optional);
+    fetch${pascalPlural}: async (query) => {
+        const url = buildApiUrl('/${plural}', query);
         return await get(url);
     },
 
-    fetch${pascalSingle}: async (id, optional) => {
-        const url = buildApiUrlNonsql('/${plural}', id, optional);
+    fetch${pascalSingle}: async (params) => {
+        const url = buildApiUrl('/${plural}', params);
         return await get(url);
     },
 
     create${pascalSingle}: async (data) => {
-        const url = buildApiUrlNonsql('/${plural}');
+        const url = buildApiUrl('/${plural}');
         return await post(url, data);
     },
 
-    update${pascalSingle}: async (id, data) => {
-        const url = buildApiUrlNonsql('/${plural}', id);
+    update${pascalSingle}: async (params, data) => {
+        const url = buildApiUrl('/${plural}', params);
         return await put(url, data);
     },
 
-    delete${pascalSingle}: async (id) => {
-        const url = buildApiUrlNonsql('/${plural}', id);
+    delete${pascalSingle}: async (params) => {
+        const url = buildApiUrl('/${plural}', params);
         return await del(url);
     },
 
     search${pascalPlural}: async (query) => {
-        const url = buildApiUrlNonsql('/search/${plural}');
+        const url = buildApiUrl('/search/${plural}');
         return await post(url, query);
     },
 }

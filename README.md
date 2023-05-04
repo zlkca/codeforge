@@ -11,14 +11,22 @@ codeforge is a tool to generate react redux web app module. By using this tool, 
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Customization](#Customization)
+- [Next](#Next)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Requirements
-- Your project need to be react redux project (mandatory for redux)
-- Your project need to use redux toolkit package (mandatory for redux)
+The code that codeforge generated has the following dependencies, which means your project need to use the following npm packages (list the affected files):
+- react (mandatory)
+- redux (mandatory)
+- redux toolkit (mandatory /redux/*.js)
+- query-string (optional /services/utils.js, you can manually create utils.js if you don't like query-string)
+- axios (optional /services/http.js, you can manually create http.js if you don't like axios)
+
+Also your project need to follow some conventions or patterns:
 - Your project use restful api, and use http POST /search/entityName for search api (mandatory for services)
+- Your project's restful api with query is like https://example.com/path/to/page?name=ferret&color=purple
+
 
 ## Installation
 
@@ -65,7 +73,14 @@ Now under the /dist folder you will see the following files and you can then cop
     └── financeApi.js
 ```
 
-## Customization
+## Next
+
+To use the generated services layer files, the next thing you need to do is find a http client lib like axios or fetch, and then create an http.js file to implement your own get, post, put and del function:
+- get(url, header) header is optional
+- post(url, body, header) header is optional
+- put(url, body, header) header is optional
+- del(url, header) header is optional
+
 You can also define your own template by modify and re-run `node codefore.js gen finance --thunk` command:
 - /services/module.js
 - /services/utils.js

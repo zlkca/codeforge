@@ -15,6 +15,9 @@ import getSelector from './template/redux/module.selector.js';
 // import getSelectorTest from './template/__tests__/redux/module.selector.test.js';
 
 import getService from './template/services/module.js';
+import getServiceUtils from './template/services/utils.js';
+import getServiceHttp from './template/services/http.js';
+
 // import getListPage from './template/pages/list.js';
 import { moduleMap } from './template/module/index.js';
 import getStore from './template/redux/store.js';
@@ -46,7 +49,9 @@ function generate(name, options){
   const modules = Object.keys(moduleMap);
   const reduxStore = getStore(modules);
   const service = getService(module);
-
+  const serviceUtils = getServiceUtils();
+  const serviceHttp = getServiceHttp();
+  
   // const listPage = getListPage(module, model);
   const dirRedux = `./dist/redux`;
   const dirReduxModule = `./dist/redux/${module.name}`;
@@ -87,6 +92,12 @@ function generate(name, options){
 
     fs.writeFileSync(`${dirServices}/${module.name}API.js`, service);
     console.log(`${dirServices}/${module.name}API.js created!`);
+
+    fs.writeFileSync(`${dirServices}/utils.js`, serviceUtils);
+    console.log(`${dirServices}/utils.js created!`);
+
+    fs.writeFileSync(`${dirServices}/http.js`, serviceHttp);
+    console.log(`${dirServices}/http.js created!`);
 
     // fs.writeFileSync(`${dirPages}/${pascalSingle}ListPage.js`, listPage);
     // console.log(`${dirServices}/${pascalSingle}ListPage.js created!`);
