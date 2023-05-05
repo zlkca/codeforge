@@ -3,7 +3,7 @@ import { program } from 'commander';
 import * as fs from 'fs';
 // import pascalcase from 'pascalcase';
 
-// import getActions from './template/redux/module.action.js';
+import getThunk from './template/redux/module.thunk.js';
 
 import getSliceWithThunk from './template/redux/module-with-thunk.slice.js';
 import getSliceTestWithThunk from './template/__tests__/redux/module-with-thunk.slice.test.js';
@@ -21,6 +21,9 @@ import getServiceHttp from './template/services/http.js';
 // import getListPage from './template/pages/list.js';
 import { moduleMap } from './template/module/index.js';
 import getStore from './template/redux/store.js';
+import getListComponent from './template/components/module.list.js';
+import getFormComponent from './template/components/module.form.js';
+import { getEntity } from './template/utils.js';
 
 
 function generate(name, options){
@@ -39,7 +42,7 @@ function generate(name, options){
     console.log("generate redux for redux-thunk ...");
   }
   // const pascalSingle = pascalcase(module.name, {pascalCase: true});
-
+  const thunk = getThunk(module);
   const reduxSlice = withThunk ? getSliceWithThunk(module) : getSlice(module);
   const reduxSliceTest = withThunk ? getSliceTestWithThunk(module) : ""; // getSliceTest(module);
   
@@ -56,7 +59,9 @@ function generate(name, options){
   const dirRedux = `./dist/redux`;
   const dirReduxModule = `./dist/redux/${module.name}`;
   const dirServices = `./dist/services`;
+  const dirComponents = `./dist/components/${module.name}`;
   const dirReduxTest = `./dist/__tests__/redux`;
+
   // const dirPages = `./dist/pages`;
 
   try{
@@ -69,12 +74,17 @@ function generate(name, options){
     if(!fs.existsSync(dirReduxModule)){
       fs.mkdirSync(dirReduxModule, {recursive:true}); 
     }
+    if(!fs.existsSync(dirComponents)){
+      fs.mkdirSync(dirComponents,  {recursive:true});
+    }
     // if(!fs.existsSync(dirPages)){
     //   fs.mkdirSync(dirPages, null, true); 
     // }
-    // fs.writeFileSync(`${dirReduxModule}/${module.name}.action.js`, actions);
-    // console.log(`${dirReduxModule}/${module.name}.actions.js created!`);
 
+    if(withThunk){
+      fs.writeFileSync(`${dirReduxModule}/${module.name}.thunk.js`, thunk);
+      console.log(`${dirReduxModule}/${module.name}.thunk.js created!`);
+    }
     fs.writeFileSync(`${dirReduxModule}/${module.name}.slice.js`, reduxSlice);
     console.log(`${dirReduxModule}/${module.name}.slice.js created!`);
     fs.writeFileSync(`${dirReduxTest}/${module.name}.slice.test.js`, reduxSliceTest);
@@ -99,8 +109,24 @@ function generate(name, options){
     fs.writeFileSync(`${dirServices}/http.js`, serviceHttp);
     console.log(`${dirServices}/http.js created!`);
 
+    
+    const entities = module.entities.map(it => {
+      return getEntity(it);
+    });
+    
+    entities.map(it => {
+      const listComponent = getListComponent(module.name, it);
+      fs.writeFileSync(`${dirComponents}/${it.pascalSingle}List.js`, listComponent);
+      console.log(`${dirComponents}/${it.pascalSingle}List.js created!`);
+
+      const formComponent = getFormComponent(module.name, it);
+      fs.writeFileSync(`${dirComponents}/${it.pascalSingle}Form.js`, formComponent);
+      console.log(`${dirComponents}/${it.pascalSingle}Form.js created!`);
+    });
+
     // fs.writeFileSync(`${dirPages}/${pascalSingle}ListPage.js`, listPage);
     // console.log(`${dirServices}/${pascalSingle}ListPage.js created!`);
+
   }catch(e){
     console.log(e);
   }

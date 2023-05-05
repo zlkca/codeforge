@@ -26,6 +26,7 @@ The code that codeforge generated has the following dependencies, which means yo
 Also your project need to follow some conventions or patterns:
 - Your project use restful api, and use http POST /search/entityName for search api (mandatory for services)
 - Your project's restful api with query is like https://example.com/path/to/page?name=ferret&color=purple
+- If you want to use redux thunk ( --thunk option ), your entity need to have _id field. The _id is use for thunk update item in the list.
 
 
 ## Installation
