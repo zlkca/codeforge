@@ -34,21 +34,6 @@ function getActions(entities){
     return arr.join("");
 }
 
-function getImportActions(entities){
-    const arr = [];
-    
-    entities.forEach(it => {
-        arr.push(`
-    fetch${it.pascalPlural},
-    fetch${it.pascalSingle},
-    create${it.pascalSingle},
-    update${it.pascalSingle},
-    delete${it.pascalSingle},
-    search${it.pascalPlural},`);
-    });
-
-    return arr.join("");
-}
 
 function getReducers(entities){
     const arr = [];

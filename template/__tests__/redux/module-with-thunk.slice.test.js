@@ -139,6 +139,17 @@ function getTestSuite(module, entities){
     return arr.join("");
 }
 
+// import { configureStore } from '@reduxjs/toolkit';
+// ${importServices}
+// ${jestMock}
+
+// describe('${module}Slice', () => {
+//     afterEach(() => {
+//         jest.resetAllMocks();
+//     })
+
+//     ${suite}
+// })
 
 export default function getSliceTestWithThunk(module){
     const entities = module.entities.map(it => {
@@ -147,17 +158,5 @@ export default function getSliceTestWithThunk(module){
     const importServices = getImportServices(entities);
     const jestMock = getJestMock(module.name, entities);
     const suite = getTestSuite(module.name, entities);
-    return `
-import { configureStore } from '@reduxjs/toolkit';
-${importServices}
-${jestMock}
-
-describe('${module}Slice', () => {
-    afterEach(() => {
-        jest.resetAllMocks();
-    })
-
-    ${suite}
-})
-    `
+    return ``
 }

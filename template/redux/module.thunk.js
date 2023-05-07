@@ -1,33 +1,5 @@
-import pascalcase from 'pascalcase';
-import {getEntity} from '../utils.js';
 
-function getInitalState(entities){
-    const arr = [];
-    
-    entities.forEach(it => {
-        arr.push(`
-    ${it.plural}: [],
-    ${it.single}: null,
-    selected${it.pascalSingle}Id: null,
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: null
-        `);
-    });
-
-    return arr.join("");
-}
-
-function getImportServices(entities){
-    const importServiceArray = [];
-    
-    entities.forEach(it => {
-        importServiceArray.push(`
-import { ${it.single}API } from '../../services/${it.single}API';
-    `);
-    });
-
-    return importServiceArray.join("");
-}
+import {getEntity, getImportServices} from '../utils.js';
 
 function getThunkRows(module, entities){
     const arr = [];
