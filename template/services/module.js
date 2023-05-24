@@ -1,7 +1,4 @@
-
-import pascalcase from 'pascalcase';
-import pluralize from "pluralize";
-import { getEntity } from '../utils';
+import { getEntity } from "../utils.js";
 
 function getApiRequests(entity){
     return `
