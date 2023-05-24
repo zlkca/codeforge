@@ -35,6 +35,13 @@ export const moduleMap = {
             'project'
         ]
     },
+    product:{
+        name: 'product',
+        entities: [
+            { name: 'product'},
+            { name: 'productCategory'}
+        ]
+    },
     plan:{
         name: 'plan',
         entities: [

@@ -9,11 +9,13 @@ function getInitalState(entities){
     ${it.plural}: [],
     ${it.single}: null,
     selected${it.pascalSingle}Id: null,
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: null
         `);
     });
 
+    arr.push(`
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed',
+    error: null
+    `)
     return arr.join("");
 }
 
