@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import { constantCase } from 'constant-case';
 
 export function getEntity(entity){
-    const single = entity;
+    const single = entity.name;
     const plural = pluralize(single);
   
     const pascalSingle = pascalcase(single, {pascalCase: true});
