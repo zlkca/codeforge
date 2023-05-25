@@ -1,12 +1,12 @@
 import {getEntity} from "../utils.js";
 
-function getRows(entities){
+function getRows(moduleName, entities){
     const arr = [];
     
     entities.forEach(it => {
         arr.push(`
-    export const select${it.pascalPlural} = (state) => state.${it.single}? state.${it.single}.${it.plural} : [];
-    export const select${it.pascalSingle} = (state) => state.${it.single}? state.${it.single}.${it.single} : null;
+    export const select${it.pascalPlural} = (state) => state.${moduleName}? state.${moduleName}.${it.plural} : [];
+    export const select${it.pascalSingle} = (state) => state.${moduleName}? state.${moduleName}.${it.single} : null;
         `);
     });
 
@@ -18,7 +18,7 @@ export default function getSelector(module){
         return getEntity(it);
     });
 
-    const rows = getRows(entities);
+    const rows = getRows(module.name, entities);
    
     return `${rows}`;
 }

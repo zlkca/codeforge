@@ -1,7 +1,7 @@
 
-import {getEntity, getImportServices} from '../utils.js';
+import {getEntity} from '../utils.js';
 
-function getThunkRows(module, entities){
+function getThunkRows(moduleName, entities){
     const arr = [];
 
     entities.forEach(it => {
@@ -9,7 +9,7 @@ function getThunkRows(module, entities){
 export const create${it.pascalSingle} = createAsyncThunk(
     "${it.single}/create${it.pascalSingle}",
     async (body, thunkAPI) => {
-        const rsp = await ${it.single}API.create${it.pascalSingle}(body)
+        const rsp = await ${moduleName}API.create${it.pascalSingle}(body)
         return rsp.data
     }
 )
@@ -17,7 +17,7 @@ export const create${it.pascalSingle} = createAsyncThunk(
 export const fetch${it.pascalPlural} = createAsyncThunk(
     "${it.single}/fetch${it.pascalPlural}",
     async (query, thunkAPI) => {
-        const rsp = await ${it.single}API.fetch${it.pascalPlural}(query)
+        const rsp = await ${moduleName}API.fetch${it.pascalPlural}(query)
         return rsp.data
     }
 )
@@ -25,7 +25,7 @@ export const fetch${it.pascalPlural} = createAsyncThunk(
 export const fetch${it.pascalSingle} = createAsyncThunk(
     "${it.single}/fetch${it.pascalSingle}",
     async (_id, thunkAPI) => {
-        const rsp = await ${it.single}API.fetch${it.pascalSingle}(_id)
+        const rsp = await ${moduleName}API.fetch${it.pascalSingle}(_id)
         return rsp.data
     }
 )
@@ -33,7 +33,7 @@ export const fetch${it.pascalSingle} = createAsyncThunk(
 export const search${it.pascalPlural} = createAsyncThunk(
     "${it.single}/search${it.pascalPlural}",
     async (query, thunkAPI) => {
-        const rsp = await ${it.single}API.search${it.pascalPlural}(query)
+        const rsp = await ${moduleName}API.search${it.pascalPlural}(query)
         return rsp.data
     }
 )
@@ -41,7 +41,7 @@ export const search${it.pascalPlural} = createAsyncThunk(
 export const update${it.pascalSingle} = createAsyncThunk(
     "${it.single}/update${it.pascalSingle}",
     async ({_id, data}, thunkAPI) => {
-        const rsp = await ${it.single}API.update${it.pascalSingle}(_id, data)
+        const rsp = await ${moduleName}API.update${it.pascalSingle}(_id, data)
         return rsp.data
     }
 )
@@ -49,7 +49,7 @@ export const update${it.pascalSingle} = createAsyncThunk(
 export const delete${it.pascalSingle} = createAsyncThunk(
     "${it.single}/delete${it.pascalSingle}",
     async ({_id}, thunkAPI) => {
-        const rsp = await ${it.single}API.delete${it.pascalSingle}(_id)
+        const rsp = await ${moduleName}API.delete${it.pascalSingle}(_id)
         return rsp.data
     }
 )
@@ -152,13 +152,13 @@ export default function getThunk(module){
         return getEntity(it);
     });
 
-    const importServices = getImportServices(entities);
-    const thunkRows = getThunkRows(module, entities);
+    const thunkRows = getThunkRows(module.name, entities);
     const extraReducers = getExtraReducers(entities);
 
     return `
 import { createAsyncThunk } from '@reduxjs/toolkit';
-${importServices}
+import { ${module.name}API } from '../../services/${module.name}API';
+
 
 ${thunkRows}
 
